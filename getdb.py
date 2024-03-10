@@ -319,4 +319,4 @@ def get_id_employee():
         if sqliteConnection:
             sqliteConnection.close()
             print("The SQLite connection is closed")  
-
+    

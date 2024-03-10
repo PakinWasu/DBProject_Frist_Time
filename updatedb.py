@@ -1,7 +1,6 @@
 import sqlite3
-import random
 import datetime
-import getbd 
+import getdb 
 
 sqlfile = 'DBlite.db'
 
@@ -11,7 +10,7 @@ def update_minus_value_product (id_order):
         cursor = sqliteConnection.cursor()
         print("Connected to SQLite")
         sql_update_query = """Update สินค้า set สินค้าคงเหลือ = ? where รหัสสินค้า = ?"""
-        for i in getbd.get_raw_idpro_valuepro_valueorderpro_statusorder(id_order):
+        for i in getdb.get_raw_idpro_valuepro_valueorderpro_statusorder(id_order):
             if i[3] == 'ชำระเสร็จสิ้น':
                 data = (i[1]-i[2], i[0])
                 cursor.execute(sql_update_query, data)
@@ -73,7 +72,7 @@ def update_price_of_product (id_pro,price):
 
 def update_plus_value_product (id_pro,plus):
     try:
-        value = getbd.get_value_pro(id_pro)
+        value = getdb.get_value_pro(id_pro)
         sqliteConnection = sqlite3.connect(sqlfile)
         cursor = sqliteConnection.cursor()
         print("Connected to SQLite")

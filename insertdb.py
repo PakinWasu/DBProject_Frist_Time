@@ -1,7 +1,7 @@
 import sqlite3
 import random
 import datetime
-import getbd 
+import getdb 
 import genpk
 import updatedb
 sqlfile = 'DBlite.db'
@@ -22,7 +22,7 @@ def insert_product(proname, photo, value_pro,disciption,price,id_brand,id_type):
 
         photo = convertToBinaryData(photo)
         # Convert data into tuple format
-        id_pro = genpk.gen_pk_nvar6(getbd.get_last_row_product())
+        id_pro = genpk.gen_pk_nvar6(getdb.get_last_row_product())
         data_tuple = (id_pro,proname, photo, value_pro,disciption,price,id_brand,id_type)
         cursor.execute(sqlite_insert_blob_query, data_tuple)
         sqliteConnection.commit()
@@ -47,8 +47,8 @@ def insert_order(id_customer):
         sqlite_insert_with_param = """INSERT INTO 'การขาย'
                           ('รหัสการขาย','รหัสพนักงาน','รหัสลูกค้า','วันเวลาที่สั่ง',สถานะการขาย) 
                           VALUES (?, ?, ?, ?, ?);"""
-        id_order = genpk.gen_pk_nvar6(getbd.get_last_row_order())
-        ran = random.choice(getbd.get_id_employee())
+        id_order = genpk.gen_pk_nvar6(getdb.get_last_row_order())
+        ran = random.choice(getdb.get_id_employee())
         id_admin = ran
         status = 'รอชำระ'
         date_time = datetime.datetime.now() 
@@ -77,8 +77,8 @@ def insert_orderdetail(id_order,id_pro,value_order_product):
         sqlite_insert_with_param = """INSERT INTO 'รายละเอียดการขาย'
                           ('รหัสรายละเอียดการขาย','ราคาต่อหน่วย','จำนวน','รหัสการขาย',รหัสสินค้า) 
                           VALUES (?, ?, ?, ?, ?);"""
-        id_orderdetail =genpk.gen_pk_nvar6(getbd.get_last_row_orderdetail())     
-        price = getbd.get_price(id_pro)
+        id_orderdetail =genpk.gen_pk_nvar6(getdb.get_last_row_orderdetail())     
+        price = getdb.get_price(id_pro)
 
         data_tuple = (id_orderdetail,price,value_order_product,id_order,id_pro)
         cursor.execute(sqlite_insert_with_param, data_tuple)
@@ -103,9 +103,9 @@ def insert_payment(id_order,bank,photo_payment):
                                   ('รหัสการชำระ','รหัสการขาย', 'ยอดชำระ', 'ชื่อธนาคาร','วันเวลาที่ชำระ','username','หลักฐานการชำระ') VALUES (?, ?, ?, ?, ?, ?, ?)"""
 
         photo_payment = convertToBinaryData(photo_payment)
-        total_price = getbd.get_totalprice(id_order)
-        username = getbd.get_username(id_order)
-        id_payment = genpk.gen_pk_nvar6(getbd.get_last_row_payment())
+        total_price = getdb.get_totalprice(id_order)
+        username = getdb.get_username(id_order)
+        id_payment = genpk.gen_pk_nvar6(getdb.get_last_row_payment())
         time_pay = datetime.datetime.now()
         # Convert data into tuple format
         data_tuple = (id_payment,id_order,total_price,bank,time_pay,username,photo_payment)
@@ -122,25 +122,22 @@ def insert_payment(id_order,bank,photo_payment):
             print("the sqlite connection is closed")
             
             
-def insert_customer(name,lastname,username,password,mail,tel,adderss):
+def insert_customer(name,lastname,username,password,mail,tel,adderss,bday,bmonth,byear):
     try:
         sqliteConnection = sqlite3.connect(sqlfile)
         cursor = sqliteConnection.cursor()
         print("Connected to SQLite")
-
         # insert developer detail
         sqlite_insert_with_param = """INSERT INTO 'ลูกค้า'
-                          ('รหัสลูกค้า','ชื่อจริง','นามสกุล','username','password','อีเมล','เบอร์โทรศัพท์','ที่อยู่') 
-                          VALUES (?, ?, ?, ?, ?, ?, ?, ?);"""
-
-        id_cus = genpk.gen_pk_nvar6(getbd.get_last_row_customer())
-
-        data_tuple = (id_cus,name,lastname,username,password,mail,tel,adderss)
+                          ('รหัสลูกค้า','ชื่อจริง','นามสกุล','username','password','อีเมล','เบอร์โทรศัพท์','ที่อยู่','วันเดือนปีเกิด') 
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);"""
+        id_cus = genpk.gen_pk_nvar6(getdb.get_last_row_customer())
+        brith_day = datetime.date(byear,bmonth,bday)
+        data_tuple = (id_cus,name,lastname,username,password,mail,tel,adderss,brith_day)
         cursor.execute(sqlite_insert_with_param, data_tuple)
         sqliteConnection.commit()
-        print("Order detail insert successfully \n")
+        print("Customer insert successfully \n")
         cursor.close()
-
     except sqlite3.Error as error:
         print("Error while working with SQLite", error)
     finally:
@@ -159,12 +156,12 @@ def insert_employee(name,lastname,tel,username,password):
                           ('รหัสพนักงาน','ชื่อจริง','นามสกุล','เบอร์โทรศัพท์','username','password') 
                           VALUES (?, ?, ?, ?, ?, ?);"""
 
-        id_emp = genpk.gen_pk_nvar4(getbd.get_last_row_employee())
+        id_emp = genpk.gen_pk_nvar4(getdb.get_last_row_employee())
 
         data_tuple = (id_emp,name,lastname,tel,username,password)
         cursor.execute(sqlite_insert_with_param, data_tuple)
         sqliteConnection.commit()
-        print("Order detail insert successfully \n")
+        print("Employee insert successfully \n")
         cursor.close()
 
     except sqlite3.Error as error:
@@ -185,12 +182,12 @@ def insert_probrand(name_brnd):
                           ('รหัสยี่ห้อสินค้า','ชื่อยี่ห้อสินค้า') 
                           VALUES (?, ?);"""
 
-        id_brand = genpk.gen_pk_nvar4(getbd.get_last_row_brand())
+        id_brand = genpk.gen_pk_nvar4(getdb.get_last_row_brand())
 
         data_tuple = (id_brand,name_brnd)
         cursor.execute(sqlite_insert_with_param, data_tuple)
         sqliteConnection.commit()
-        print("Order detail insert successfully \n")
+        print("Product brand insert successfully \n")
         cursor.close()
 
     except sqlite3.Error as error:
@@ -210,12 +207,12 @@ def insert_protype(name_type):
                           ('รหัสประเภทสินค้า','ชื่อประเภทสินค้า') 
                           VALUES (?, ?);"""
 
-        id_type = genpk.gen_pk_nvar4(getbd.get_last_row_type())
+        id_type = genpk.gen_pk_nvar4(getdb.get_last_row_type())
 
         data_tuple = (id_type,name_type)
         cursor.execute(sqlite_insert_with_param, data_tuple)
         sqliteConnection.commit()
-        print("Order detail insert successfully \n")
+        print("Product type insert successfully \n")
         cursor.close()
 
     except sqlite3.Error as error:
@@ -227,7 +224,7 @@ def insert_protype(name_type):
             
             
             
-# insert_customer('Somnamna','Narak','Somjai','sasake','sasemekyou@gmail.com','0992348097','Bankok')
+insert_customer('Somnamna','Narak','Somjai','sasake','sasemekyou@gmail.com','0992348097','Bankok',9,8,2002)
 # insert_employee('ณัทชพล','แดงฉ่ำ','0998765743','nutnut','dango124')
 # insert_probrand('VS')
 # insert_protype('รองเท้าวิ่ง')

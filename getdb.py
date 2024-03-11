@@ -292,12 +292,7 @@ def get_last_row_payment():
         if sqliteConnection:
             sqliteConnection.close()
             print("The SQLite connection is closed")  
-
-print(get_last_row_payment())
-
-
-# print(get_value_pro('P00001'))
-#get_raw_idpro_valuepro_valueorderpro_statusorder('S1')
+            
 def get_id_employee():
     try:
         sqliteConnection = sqlite3.connect(sqlfile)
@@ -319,4 +314,10 @@ def get_id_employee():
         if sqliteConnection:
             sqliteConnection.close()
             print("The SQLite connection is closed")  
+#print(get_last_row_payment())
+
+
+# print(get_value_pro('P00001'))
+#get_raw_idpro_valuepro_valueorderpro_statusorder('S1')
+
     

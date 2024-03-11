@@ -7,7 +7,7 @@ import updatedb
 import genpk
 sqlfile = 'DBlite.db'
 
-insertdb.insert_order()
+insertdb.insert_order('C00001')
 
 #insertdb.insert_orderdetail('S00004','P00002',2)
  

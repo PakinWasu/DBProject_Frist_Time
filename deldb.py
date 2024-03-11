@@ -68,4 +68,4 @@ def del_order(id_order):
 
 # del_order_detail('S00004')
 # del_payment('S00004')
-del_order('S00004')
+#del_order('S00004')

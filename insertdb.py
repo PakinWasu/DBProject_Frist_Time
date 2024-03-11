@@ -224,7 +224,7 @@ def insert_protype(name_type):
             
             
             
-insert_customer('Somnamna','Narak','Somjai','sasake','sasemekyou@gmail.com','0992348097','Bankok',9,8,2002)
+#insert_customer('Somnamna','Narak','Somjai','sasake','sasemekyou@gmail.com','0992348097','Bankok',9,8,2002)
 # insert_employee('ณัทชพล','แดงฉ่ำ','0998765743','nutnut','dango124')
 # insert_probrand('VS')
 # insert_protype('รองเท้าวิ่ง')

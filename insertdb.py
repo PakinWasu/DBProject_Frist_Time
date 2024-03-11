@@ -86,7 +86,7 @@ def insert_orderdetail(id_order,id_pro,value_order_product):
         print("Order detail insert successfully \n")
         cursor.close()
         updatedb.update_datetime_order(id_order)
-        
+        updatedb.update_price_payment(id_order)
     except sqlite3.Error as error:
         print("Error while working with SQLite", error)
     finally:

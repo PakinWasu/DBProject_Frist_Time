@@ -72,7 +72,8 @@ def get_totalprice(id_order):
         if sqliteConnection:
             sqliteConnection.close()
             print("The SQLite connection is closed")  
-    
+
+
 def get_username(id_order):
     try:
         sqliteConnection = sqlite3.connect(sqlfile)

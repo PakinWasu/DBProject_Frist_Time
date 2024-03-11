@@ -7,7 +7,8 @@ import updatedb
 import genpk
 sqlfile = 'DBlite.db'
 
-#insertdb.insert_order('C00002')
+insertdb.insert_order()
+
 #insertdb.insert_orderdetail('S00004','P00002',2)
  
 # insertdb.insert_payment('S00004','SCB','D:\DBProject\picpro\slip1.jpg')

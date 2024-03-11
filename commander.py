@@ -7,12 +7,11 @@ import updatedb
 import genpk
 sqlfile = 'DBlite.db'
 
-#insertdb.insert_order('C00002')
+insertdb.insert_order('C00001')
 
-#insertdb.insert_orderdetail('S00008','P00009',1)
+#insertdb.insert_orderdetail('S00008','P00008',1)
  
-#insertdb.insert_payment('S00008','MYMO','D:\DBProject_Frist_Time\picpro\slip3.jpg')
-
+#updatedb.update_slip_payment('S00008','MYMO','D:\DBProject_Frist_Time\picpro\slip3.jpg')
 #updatedb.update_vertify_payment('S00008')
 
 

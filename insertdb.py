@@ -57,7 +57,7 @@ def insert_order(id_customer):
         sqliteConnection.commit()
         print("Order insert successfully \n")
         cursor.close()
-
+        insert_payment(id_order)
     except sqlite3.Error as error:
         print("Error while working with SQLite", error)
     finally:
@@ -94,21 +94,19 @@ def insert_orderdetail(id_order,id_pro,value_order_product):
             sqliteConnection.close()
             print("sqlite connection is closed")
             
-def insert_payment(id_order,bank,photo_payment):
+def insert_payment(id_order):
     try:
         sqliteConnection = sqlite3.connect(sqlfile)
         cursor = sqliteConnection.cursor()
         print("Connected to SQLite")
         sqlite_insert_blob_query = """ INSERT INTO 'การชำระ'
-                                  ('รหัสการชำระ','รหัสการขาย', 'ยอดชำระ', 'ชื่อธนาคาร','วันเวลาที่ชำระ','username','หลักฐานการชำระ') VALUES (?, ?, ?, ?, ?, ?, ?)"""
+                                  ('รหัสการชำระ','รหัสการขาย', 'ยอดชำระ','username') VALUES (?, ?, ?, ?)"""
 
-        photo_payment = convertToBinaryData(photo_payment)
         total_price = getdb.get_totalprice(id_order)
         username = getdb.get_username(id_order)
         id_payment = genpk.gen_pk_nvar6(getdb.get_last_row_payment())
-        time_pay = datetime.datetime.now()
         # Convert data into tuple format
-        data_tuple = (id_payment,id_order,total_price,bank,time_pay,username,photo_payment)
+        data_tuple = (id_payment,id_order,total_price,username)
         cursor.execute(sqlite_insert_blob_query, data_tuple)
         sqliteConnection.commit()
         print("Payment insert successfully as a BLOB into a table")

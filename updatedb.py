@@ -3,6 +3,11 @@ import datetime
 import getdb 
 
 sqlfile = 'DBlite.db'
+def convertToBinaryData(filename):
+    # Convert digital data to binary format
+    with open(filename, 'rb') as file:
+        blobData = file.read()
+    return blobData
 
 def update_minus_value_product (id_order):
     try:
@@ -62,14 +67,14 @@ def update_price_of_product (id_pro,price):
         sqliteConnection.commit()
         print("Record Updated successfully")
         cursor.close()
-
     except sqlite3.Error as error:
         print("Failed to update sqlite table", error)
     finally:
         if sqliteConnection:
             sqliteConnection.close()
             print("The sqlite connection is closed")
-
+            
+            
 def update_plus_value_product (id_pro,plus):
     try:
         value = getdb.get_value_pro(id_pro)
@@ -90,8 +95,6 @@ def update_plus_value_product (id_pro,plus):
         if sqliteConnection:
             sqliteConnection.close()
             print("The sqlite connection is closed")
-            
-# update_plus_value_product('P00001',1)
 def update_datetime_order (id_order):
     try:
         sqliteConnection = sqlite3.connect(sqlfile)
@@ -111,5 +114,29 @@ def update_datetime_order (id_order):
         if sqliteConnection:
             sqliteConnection.close()
             print("The sqlite connection is closed")
-        
+
+def update_slip_payment (id_order,bank,photo_payment):
+    try:
+        sqliteConnection = sqlite3.connect(sqlfile)
+        cursor = sqliteConnection.cursor()
+        print("Connected to SQLite")
+        sql_update_query = """Update การชำระ set ชื่อธนาคาร  = ?,วันเวลาที่ชำระ = ? ,หลักฐานการชำระ = ?,ยอดชำระ = ? where รหัสการขาย = ?"""
+        photo_payment = convertToBinaryData(photo_payment)
+        time_pay = datetime.datetime.now()
+        total_price = getdb.get_totalprice(id_order)
+
+        data = (bank,time_pay,photo_payment,total_price,id_order)
+        cursor.execute(sql_update_query, data)
+        sqliteConnection.commit()
+        print("Record Updated successfully")               
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to update sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The sqlite connection is closed")        
+
+
+# update_plus_value_product('P00001',1)        
 # update_datetime_order('S00001')

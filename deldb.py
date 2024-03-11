@@ -45,7 +45,6 @@ def del_payment(id_order):
             print("sqlite connection is closed")
 
 def del_order(id_order):
-    
     try:
         del_order_detail(id_order)
         del_payment(id_order)
